@@ -1,6 +1,6 @@
 # 🚀 SwiftShop  
 ### Full-Stack E-Commerce Application  
-**Built with Django REST Framework · React.js · Celery · Redis · PostgreSQL**
+**Built with Django REST Framework · React.js · Celery · Redis · SQLite**
 
 SwiftShop is a modern, API-driven e-commerce platform designed for speed, scalability, and clean architecture.  
 It uses a fully decoupled stack where **Django REST Framework** powers the backend, **React** handles the frontend, and **Celery** manages background jobs.
