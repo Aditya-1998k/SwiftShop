@@ -1,10 +1,22 @@
 from django.urls import path
-from .views import ProfileViewset
+from .views import create_user, logout_view, my_profile
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView
+)
 
-router = DefaultRouter()
+# router = DefaultRouter()
+# router.register('profile', ProfileViewset, basename='user_profile')
 
-router.register('profile', ProfileViewset, basename='user_profile')
 
 urlpatterns = [
-] + router.urls
+    path("profile/", my_profile, name="my profile"),
+    path("create_user/", create_user, name="create user"),
+    
+    # jwt token api
+    path("api/token/", TokenObtainPairView.as_view(), name="obtain the token"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh the token"),
+    path("api/logout/", logout_view, name="logout"),
+
+] #+ router.urls

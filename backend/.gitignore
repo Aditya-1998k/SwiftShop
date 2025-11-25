@@ -1,0 +1,26 @@
+# -------------------------
+# Python / Django
+# -------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
+# Local environment settings
+.env
+.env.local
+
+# SimpleJWT blacklist tokens (if using file-based DB)
+token_blacklist/
+
