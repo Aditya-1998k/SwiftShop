@@ -1,117 +1,196 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "../../utils/axios" 
+import axios from "../../utils/axios";
 import ProfileModal from "../users/ProfileModal";
 
 function Navbar() {
-    const [showProfile, setShowProfile] = useState(false);
-    const navigate = useNavigate()
-    const [searchText, setSearchText] = useState("");
-    const isLoggedIn = !!localStorage.getItem("token");
-    const [user, setUser] = useState(null);
+  const [showProfile, setShowProfile] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [user, setUser] = useState(null);
 
-    const fetchUser = async () => {
+  const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("token");
+
+  const fetchUser = async () => {
     try {
-        const res = await axios.get("users/profile/");
-        debugger;
-        setUser(res.data);
+      const res = await axios.get("users/profile/");
+      setUser(res.data);
     } catch (err) {
-        console.log("Profile fetch error:", err);
+      console.log("Profile fetch error:", err);
     }
-    };
+  };
 
-    const handleLogOut = async () => {
-        try {
-            const refresh = localStorage.getItem("refresh");
-            await axios.post("users/api/token/refresh/", { refresh });
+  const handleLogout = async () => {
+    try {
+      const refresh = localStorage.getItem("refresh");
+      await axios.post("users/api/token/refresh/", { refresh });
+    } catch (e) {
+      console.error("Logout error", e);
+    }
 
-        } catch (e) {
-            console.error("Logout error", e);
-        }
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh");
+    setShowProfile(false);
+    navigate("/");
+  };
 
-        // Remove frontend tokens:
-        localStorage.removeItem("token");
-        localStorage.removeItem("refresh");
-
-        setShowProfile(false);
-        navigate("/");
-    };
-
-    const handleSearch = () => {
-        if (!searchText.trim()) return;
-        window.location.href = `/search?query=${encodeURIComponent(searchText)}`;
-    };
-
+  const handleSearch = () => {
+    if (!searchText.trim()) return;
+    window.location.href = `/search?query=${encodeURIComponent(searchText)}`;
+  };
 
   return (
     <>
-      <nav className="relative bg-black/90 border-b border-white/10">
-        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-          <div className="relative flex h-16 items-center justify-between">
+      <nav className="bg-black/90 border-b border-white/10">
+        <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
 
-            {/* Left Navigation */}
-            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+            {/* Left section */}
+            <div className="flex items-center">
+              {/* Hamburger (Mobile only) */}
+              <button
+                className="sm:hidden text-white mr-3"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
 
-                {/* LOGO (Clickable → Home) */}
-                <Link to="/" className="flex shrink-0 items-center">
-                    <img
-                    src="https://www.svgrepo.com/show/501826/shop.svg"
-                    alt="SwiftShop"
-                    className="h-8 w-auto"
-                    />
-                    <span className="ml-2 text-white font-semibold text-lg">SwiftShop</span>
+              {/* Logo */}
+              <Link to="/" className="flex items-center">
+                <img
+                  src="https://www.svgrepo.com/show/501826/shop.svg"
+                  className="h-8 w-auto"
+                  alt="SwiftShop"
+                />
+                <span className="ml-2 text-white font-semibold text-lg">SwiftShop</span>
+              </Link>
+
+              {/* Desktop Nav Links */}
+              <div className="hidden sm:flex space-x-4 ml-6">
+                <Link
+                  to="/products"
+                  className="px-3 py-2 text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 rounded-md transition"
+                >
+                  Products
                 </Link>
 
-                {/* NAV LINKS */}
-                <div className="sm:ml-6 sm:block">
-                    <div className="flex space-x-4">
-                        <Link to="/products" className="px-3 py-2 text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 rounded-md transition">
-                            Products
-                        </Link>
-
-                        <Link to="/cart" className="px-3 py-2 text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 rounded-md transition">
-                            Cart
-                        </Link>
-                    </div>
-                </div>
+                <Link
+                  to="/cart"
+                  className="px-3 py-2 text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 rounded-md transition"
+                >
+                  Cart
+                </Link>
+              </div>
             </div>
 
-                
+            {/* Desktop Search */}
+            <div className="hidden sm:flex items-center bg-white/10 rounded-lg px-3 py-1 mx-4">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                className="bg-transparent text-white placeholder-gray-300 focus:outline-none w-48 sm:w-64"
+              />
 
-            {/* Right Side */}
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-10 sm:pr-0">
+              <button
+                onClick={handleSearch}
+                className="ml-2 px-3 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 transition"
+              >
+                Search
+              </button>
+            </div>
 
-              {/* Search Button */}
-              <div className="hidden sm:flex items-center bg-white/10 rounded-lg px-3 py-1 mr-4">
-                <input type="text" placeholder="Search products..."
-                    value={searchText} onChange={(e) => setSearchText(e.target.value)}
-                    className="bg-transparent text-white placeholder-gray-300 focus:outline-none w-48 sm:w-64"
-                />
-
-                <button onClick={handleSearch} className="ml-2 px-3 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 transition">
-                    Search
+            {/* Right side - Login / Profile */}
+            <div className="flex items-center space-x-3">
+              {isLoggedIn ? (
+                <button
+                  onClick={() => {
+                    fetchUser();
+                    setShowProfile(true);
+                  }}
+                  className="rounded-full p-1 hover:bg-white/20"
+                >
+                  <img
+                    src="https://ui-avatars.com/api/?name=User"
+                    alt="profile"
+                    className="h-8 w-8 rounded-full border border-white/30"
+                  />
                 </button>
-            </div>
-
-              {/* 🔐 IF LOGGED IN → SHOW PROFILE AVATAR */}
-                {isLoggedIn ? (
-                    <button onClick={() => {fetchUser(); setShowProfile(true)}} className="rounded-full p-2 ml-3 hover:bg-white/20">
-                        <img src="https://ui-avatars.com/api/?name=User" alt="profile" className="h-8 w-8 rounded-full border border-white/30"/>
-                    </button>
-                ) : (
-                    /* 🔓 IF NOT LOGGED IN → SHOW LOGIN ICON */
-                    <Link to="/login" className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-indigo-500 transition">
-                        🔐 Login
-                    </Link>
-                )}
+              ) : (
+                <Link
+                  to="/login"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-indigo-500 transition"
+                >
+                  🔐 Login
+                </Link>
+              )}
             </div>
           </div>
+
+          {/* ======================== */}
+          {/*        MOBILE MENU       */}
+          {/* ======================== */}
+          {isMobileMenuOpen && (
+            <div className="sm:hidden mt-2 bg-black/80 p-4 rounded-lg space-y-3">
+
+              {/* Mobile Search */}
+              <div className="flex bg-white/10 rounded-lg px-3 py-2">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  className="bg-transparent text-white placeholder-gray-300 focus:outline-none flex-1"
+                />
+                <button
+                  onClick={handleSearch}
+                  className="ml-2 px-3 py-1 bg-indigo-600 text-white rounded-md"
+                >
+                  Go
+                </button>
+              </div>
+
+              {/* Mobile Nav Items */}
+              <Link
+                to="/products"
+                className="block text-gray-200 hover:text-white"
+              >
+                Products
+              </Link>
+
+              <Link
+                to="/cart"
+                className="block text-gray-200 hover:text-white"
+              >
+                Cart
+              </Link>
+
+              {isLoggedIn && (
+                <button
+                  onClick={handleLogout}
+                  className="mt-2 w-full bg-red-600 text-white py-2 rounded-md"
+                >
+                  Logout
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </nav>
 
-      <ProfileModal open={showProfile} user={user}
-        onClose={() => setShowProfile(false)} onLogout={handleLogOut}
+      <ProfileModal
+        open={showProfile}
+        user={user}
+        onClose={() => setShowProfile(false)}
+        onLogout={handleLogout}
       />
     </>
   );

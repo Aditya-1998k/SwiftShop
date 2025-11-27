@@ -25,7 +25,7 @@ const Login = () => {
       console.log("Login Success.", response.data);
       localStorage.setItem("token", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
-      navigate("/dashboard")
+      navigate("/")
     } catch (err) {
       setError(err.response?.data?.message || "Login Failed");
     } finally {
@@ -38,7 +38,7 @@ const Login = () => {
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
-          src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+          src="https://www.svgrepo.com/show/501826/shop.svg"
           alt="Task Tracker"
           className="mx-auto h-10 w-auto"
         />
