@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 YN_CHOICES = [
@@ -47,3 +49,24 @@ class ProductImages(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.name}"
+
+
+class Review(models.Model):
+    product = models.ForeignKey(
+        Product,
+        related_name='reviews',
+        on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        User,
+        related_name='reviews',
+        on_delete=models.CASCADE
+    )
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    review_text = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.rating}⭐"
