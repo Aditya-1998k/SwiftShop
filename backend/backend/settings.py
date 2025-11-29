@@ -44,10 +44,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     # User Defined Apps
-    'users',
+    "users.apps.UsersConfig",
     'product',
     'orders',
-    'cart',
+    "cart.apps.CartConfig",
     'payments'
 ]
 
@@ -155,3 +155,6 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     'BLACKLIST_AFTER_ROTATION': True
 }
+
+RAZORPAY_KEY_ID="rzp_test_RlXFLK1IbxKkVH"
+RAZORPAY_KEY_SECRET="dQNDbaHm4f1hA552mU9nGZ73"

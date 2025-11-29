@@ -54,7 +54,7 @@ function Footer() {
 
           <div className="flex items-center gap-3 mb-3">
             <FaPhone size={18} />
-            <p className="text-sm">+91 964365260598765 43210</p>
+            <p className="text-sm">+91 9643652605</p>
           </div>
 
           <div className="flex items-center gap-3">

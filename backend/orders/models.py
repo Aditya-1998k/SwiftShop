@@ -35,6 +35,7 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    transaction_id = models.CharField(max_length=100, blank=True, null=True)
 
     status = models.CharField(max_length=20, choices=STATUS, default='PENDING')
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='PENDING')

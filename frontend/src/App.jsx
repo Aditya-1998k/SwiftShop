@@ -13,6 +13,12 @@ import ProductSection from "./Components/products/ProductSection";
 import Footer from "./Components/home/Footer";
 import Cart from "./Components/Buy/Cart";
 import Payment from "./Components/Buy/Payment";
+import OrderSuccess from "./Components/Order/OrderSuccess";
+import TrackOrder from "./Components/Order/TrackOrder";
+import Support from "./Components/Order/Support";
+import MyOrders from "./Components/Order/MyOrder";
+import OrderDetails from "./Components/Order/OrderDetails";
+import ProductItem from "./Components/products/Item";
 
 function App() {
   return (
@@ -23,6 +29,7 @@ function App() {
           <Route path="/cart" element={<Cart/>}></Route>
           <Route path="/products" element={<ProductSection/>} />
           <Route path="/category/:slug" element={<CategoryPage />} />
+          <Route path="/product/:id" element={<ProductItem />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/forget_password" element={<ForgetPassword/>}/>
@@ -30,6 +37,11 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/user" element={<User/>} />
             <Route path="/payment" element={<Payment/>}></Route>
+            <Route path="/order-success" element={<OrderSuccess />} />
+            <Route path="/track-order/:orderId" element={<TrackOrder />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/my-orders" element={<MyOrders />} />
+            <Route path="/orders/:id" element={<OrderDetails />} />
           </Route> 
         </Routes>
         <Footer/>

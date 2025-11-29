@@ -9,6 +9,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
+  const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
 
 
   const handleLogin = async (e) => {
@@ -22,7 +23,6 @@ const Login = () => {
           url: "users/api/token/",
           data: {username, password}
       });
-      console.log("Login Success.", response.data);
       localStorage.setItem("token", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
       navigate("/")

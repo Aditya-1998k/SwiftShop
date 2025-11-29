@@ -40,3 +40,13 @@ def products_by_category(request, category_slug):
         "category_slug": category.slug,
         "products": serializer.data
     })
+
+
+@api_view(["GET"])
+def get_product(request, id):
+    try:
+        product = Product.objects.filter(id=id).first()
+        serializer = ProductSerializer(product).data
+        return Response({"product": serializer}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)

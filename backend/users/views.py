@@ -1,4 +1,5 @@
-from .serializer import UserSerializer, UserProfileSerializer
+from .serializer import UserSerializer, UserProfileSerializer, AddressSerializer
+from .models import Address
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -40,3 +41,29 @@ def logout_view(request):
     response = Response({"message": "Logged out successfully"})
     response.delete_cookie("refresh_token")
     return response
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_addresses(request):
+    addresses = Address.objects.filter(user=request.user)
+    serializer = AddressSerializer(addresses, many=True)
+    return Response({"addresses": serializer.data})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def add_address(request):
+    serializer = AddressSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response({"message": "Address added", "address": serializer.data})
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def set_default_address(request, pk):
+    Address.objects.filter(user=request.user, is_default=True).update(is_default=False)
+    Address.objects.filter(pk=pk, user=request.user).update(is_default=True)
+    return Response({"message": "Default address updated"})

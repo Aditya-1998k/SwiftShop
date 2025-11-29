@@ -27,7 +27,11 @@ function Dashboard({ user }) {
         {/* Deals Section */}
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
           {deals.map((item, i) => (
-            <div key={i} className="bg-white p-3 rounded-lg shadow hover:shadow-md cursor-pointer">
+            <div 
+            key={i}
+            className="bg-white p-3 rounded-lg shadow hover:shadow-md cursor-pointer"
+            onClick={() => navigate(`/category/${item.slug}`)}
+            >
               <img src={item.img} alt={item.name} className="h-28 w-full object-contain mb-2 rounded"/>
               <h3 className="text-sm font-semibold">{item.name}</h3>
               <p className="text-indigo-600 font-bold text-sm">{item.price}</p>

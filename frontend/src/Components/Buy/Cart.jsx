@@ -32,7 +32,7 @@ function Cart() {
           {/* Left Section — Cart Items */}
           <div className="md:col-span-2 space-y-4">
             {cart.map((item, index) => (
-              <div key={item.index}
+              <div key={index}
                 className="border bg-white p-4 rounded-lg flex items-center justify-between shadow"
               >
                 <div className="flex items-center gap-4">

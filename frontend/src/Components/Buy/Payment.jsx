@@ -1,94 +1,165 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import {
-  FaCreditCard,
-  FaWallet,
-  FaMoneyBillWave,
-  FaGoogle,
-  FaHome,
-} from "react-icons/fa";
+import AddressSelector from "./Address";
+import apiClient from "../../utils/axios";
+import { FaCreditCard, FaMoneyBillWave } from "react-icons/fa";
 
 function Payment() {
   const { cart } = useContext(CartContext);
   const navigate = useNavigate();
 
-  // When user hits payment, ensure he's logged in
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState(null);
+
   useEffect(() => {
     const isLoggedIn = !!localStorage.getItem("token");
     if (!isLoggedIn) navigate("/login");
   }, [navigate]);
 
-  // Calculate total
-  const totalPrice = cart.reduce((sum, item) => {
-    const price = parseInt(item.price)
-    return sum + price * item.qty;
-  }, 0);
-
+  const totalPrice = cart.reduce((sum, item) => sum + parseInt(item.price) * item.qty, 0);
   const deliveryCharge = totalPrice > 500 ? 0 : 40;
-
   const finalAmount = totalPrice + deliveryCharge;
 
-  const handlePayment = () => {
-    alert("Proceeding to payment gateway...");
-    // later -> integrate Razorpay
+  // --------------------------
+  // COD ORDER CREATION
+  // --------------------------
+  const handleCOD = async () => {
+    if (!selectedAddress) return alert("Please select address");
+
+    try {
+      await apiClient.post("payment/cod-order/", {
+        address_id: selectedAddress,
+        total_amount: finalAmount,
+        cart,
+      });
+
+      setTimeout(() => navigate("/order-success"), 300);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to place COD order");
+    }
+  };
+
+  // --------------------------
+  // Razorpay Payment
+  // --------------------------
+  const handleRazorpayPayment = async () => {
+    if (!selectedAddress) return alert("Please select address");
+
+    try {
+      const res = await apiClient.post("payment/create-razorpay-order/", {
+        amount: finalAmount * 100,
+      });
+
+      const { order_id, amount, currency, key } = res.data;
+
+      const options = {
+        key,
+        amount,
+        currency,
+        name: "My Ecommerce Store",
+        description: "Order Payment",
+        order_id,
+
+        handler: async (response) => {
+          try {
+            await apiClient.post("payment/verify/", {
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+              address_id: selectedAddress,
+              cart,
+              total_amount: finalAmount,
+            });
+
+            // FIX: Delay navigation so popup fully closes
+            setTimeout(() => navigate("/order-success"), 600);
+          } catch (error) {
+            console.log(error);
+            alert("Payment verification failed!");
+          }
+        },
+
+        modal: {
+          ondismiss: function () {
+            console.log("Popup closed by user");
+          },
+        },
+
+        prefill: {
+          name: "User",
+          email: "user@example.com",
+          contact: "9999999999",
+        },
+
+        theme: {
+          color: "#4F46E5",
+        },
+      };
+
+      const razorPayObj = new window.Razorpay(options);
+      razorPayObj.open();
+    } catch (error) {
+      console.error(error);
+      alert("Payment failed");
+    }
+  };
+
+  // --------------------------
+  // FINAL PAY BUTTON
+  // --------------------------
+  const handlePay = () => {
+    if (paymentMethod === "COD") handleCOD();
+    else if (paymentMethod === "ONLINE") handleRazorpayPayment();
+    else alert("Please select payment method");
   };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">Select Payment Method</h1>
+      <h1 className="text-2xl font-bold mb-6">Checkout</h1>
 
       <div className="grid md:grid-cols-3 gap-6">
+        {/* LEFT */}
+        <div className="md:col-span-2">
+          <AddressSelector
+            selectedAddress={selectedAddress}
+            setSelectedAddress={setSelectedAddress}
+          />
 
-        {/* LEFT - Payment Methods */}
-        <div className="md:col-span-2 space-y-4">
+          <h2 className="mt-6 font-semibold text-lg mb-2">Payment Method</h2>
 
-          {/* Credit / Debit Card */}
-          <div className="bg-white p-4 rounded-lg shadow hover:shadow-md cursor-pointer">
-            <div className="flex items-center gap-3">
+          <div className="space-y-4">
+
+            {/* ONLINE */}
+            <div
+              onClick={() => setPaymentMethod("ONLINE")}
+              className={`p-4 rounded-lg shadow cursor-pointer bg-white flex items-center gap-3 border 
+                ${paymentMethod === "ONLINE" ? "border-indigo-600" : "border-gray-300"}`}
+            >
               <FaCreditCard className="text-indigo-600" size={25} />
-              <h2 className="text-lg font-semibold">Credit / Debit Card</h2>
+              <h2 className="text-lg font-semibold">Online Payment (Razorpay)</h2>
             </div>
-            <p className="text-gray-600 mt-1 text-sm">
-              Visa, Mastercard, Rupay, Amex
-            </p>
-          </div>
 
-          {/* UPI */}
-          <div className="bg-white p-4 rounded-lg shadow hover:shadow-md cursor-pointer">
-            <div className="flex items-center gap-3">
-              <FaGoogle className="text-green-600" size={25} />
-              <h2 className="text-lg font-semibold">UPI (Google Pay / PhonePe / Paytm)</h2>
-            </div>
-            <p className="text-gray-600 mt-1 text-sm">Instant & secure</p>
-          </div>
-
-          {/* Wallets */}
-          <div className="bg-white p-4 rounded-lg shadow hover:shadow-md cursor-pointer">
-            <div className="flex items-center gap-3">
-              <FaWallet className="text-yellow-500" size={25} />
-              <h2 className="text-lg font-semibold">Wallets</h2>
-            </div>
-            <p className="text-gray-600 mt-1 text-sm">Amazon Pay, PhonePe, Paytm</p>
-          </div>
-
-          {/* Cash on Delivery */}
-          <div className="bg-white p-4 rounded-lg shadow hover:shadow-md cursor-pointer">
-            <div className="flex items-center gap-3">
+            {/* COD */}
+            <div
+              onClick={() => setPaymentMethod("COD")}
+              className={`p-4 rounded-lg shadow cursor-pointer bg-white flex items-center gap-3 border 
+                ${paymentMethod === "COD" ? "border-green-600" : "border-gray-300"}`}
+            >
               <FaMoneyBillWave className="text-green-700" size={25} />
               <h2 className="text-lg font-semibold">Cash on Delivery</h2>
             </div>
-            <p className="text-gray-600 mt-1 text-sm">Pay when you receive the order</p>
-          </div>
 
+          </div>
         </div>
 
-        {/* RIGHT - Price Summary */}
+        {/* RIGHT */}
         <div className="bg-white p-4 rounded-lg shadow h-fit">
           <h2 className="text-lg font-semibold mb-4">Price Details</h2>
 
           <p className="flex justify-between">
-            <span>Price ({cart.length} items):</span>
+            <span>Items:</span>
             <span>₹{totalPrice}</span>
           </p>
 
@@ -100,19 +171,17 @@ function Payment() {
           <hr className="my-3" />
 
           <p className="flex justify-between font-bold text-lg">
-            <span>Total Amount:</span>
+            <span>Total:</span>
             <span>₹{finalAmount}</span>
           </p>
 
           <button
-            onClick={handlePayment}
+            onClick={handlePay}
             className="mt-6 w-full bg-indigo-600 text-white py-2 rounded-lg text-lg hover:bg-indigo-700"
           >
-            Place Order
+            {paymentMethod === "COD" ? "Place COD Order" : "Pay Now"}
           </button>
-
         </div>
-
       </div>
     </div>
   );

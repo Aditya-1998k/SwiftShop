@@ -55,7 +55,7 @@ function ProductSection() {
               <div
                 key={p.id}
                 className="border rounded-lg p-3 shadow hover:shadow-md cursor-pointer bg-white"
-                onClick={() => navigate(`/product/${p.slug}`)}
+                onClick={() => navigate(`/product/${p.id}`)}
               >
                 <img
                   src={p.image}
