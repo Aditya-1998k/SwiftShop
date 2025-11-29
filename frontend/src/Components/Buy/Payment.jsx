@@ -21,7 +21,7 @@ function Payment() {
 
   // Calculate total
   const totalPrice = cart.reduce((sum, item) => {
-    const price = parseInt(item.price.replace(/[^0-9]/g, ""));
+    const price = parseInt(item.price)
     return sum + price * item.qty;
   }, 0);
 

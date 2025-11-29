@@ -8,8 +8,7 @@ function Cart() {
 
   // Calculate total price
   const totalPrice = cart.reduce((sum, item) => {
-    const price = parseInt(item.price.replace(/[^0-9]/g, "")); // remove ₹ sign
-    return sum + price * item.qty;
+    return sum + parseInt(item.price) * item.qty;
   }, 0);
 
   // Handle Buy Now / Checkout
@@ -21,7 +20,6 @@ function Cart() {
       navigate("/payment");
     }
   };
-
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
@@ -33,12 +31,12 @@ function Cart() {
 
           {/* Left Section — Cart Items */}
           <div className="md:col-span-2 space-y-4">
-            {cart.map((item) => (
-              <div key={item.id}
+            {cart.map((item, index) => (
+              <div key={item.index}
                 className="border bg-white p-4 rounded-lg flex items-center justify-between shadow"
               >
                 <div className="flex items-center gap-4">
-                  <img src={item.img} className="h-20 w-20 object-contain rounded" alt={item.name}/>
+                  <img src={item.img || item.image} className="h-20 w-20 object-contain rounded" alt={item.name}/>
 
                   <div>
                     <h3 className="font-semibold text-lg">{item.name}</h3>
