@@ -53,16 +53,6 @@ function MyOrders() {
               </span>
             </div>
 
-            {/* Order Items
-            <div className="border-t pt-4">
-              {order.items.map((item, idx) => (
-                <div key={idx} className="flex justify-between mb-2">
-                  <span>{item.product_name} × {item.quantity}</span>
-                  <span>₹{item.price}</span>
-                </div>
-              ))}
-            </div> */}
-
             {/* Total */}
             <div className="mt-3 font-semibold">
               Total Amount: ₹{order.total_amount}
@@ -97,7 +87,7 @@ function MyOrders() {
 
               {/* Support */}
               <Link
-                to={`/support?order=${order.id}`}
+                to={`/support/${order.id}`}
                 className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
               >
                 <FaHeadset />

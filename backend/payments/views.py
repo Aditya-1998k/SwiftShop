@@ -33,7 +33,6 @@ def create_razorpay_order(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def verify_payment(request):
-    breakpoint()
     data = request.data
     user = request.user
 
