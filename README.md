@@ -1,5 +1,5 @@
 ## 🚀 **SwiftShop — Modern Full-Stack E-Commerce Platform**  
-### **Django REST Framework · React.js (Vite) · Celery · RabbitMQ **
+### **Django REST Framework · React.js (Vite) · Celery · RabbitMQ**
 
 SwiftShop is a modern, scalable, and fully decoupled e-commerce platform built for both learning and production-ready architecture.  
 It features a powerful Django backend, a clean React frontend, async processing using Celery, and automatic PDF invoice & receipt generation.
