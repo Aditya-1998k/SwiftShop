@@ -165,8 +165,8 @@ SIMPLE_JWT = {
 }
 
 # Payment Gateway configuration
-RAZORPAY_KEY_ID="rzp_test_Rld51u5ruqaffo"
-RAZORPAY_KEY_SECRET="ekVOEAmPCjNqNBCct665TvpI"
+RAZORPAY_KEY_ID="adsafsdasfd"
+RAZORPAY_KEY_SECRET="asdfadsfas"
 
 
 # GMAIL SMTP Settings
@@ -175,7 +175,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ag9889732@gmail.com'
-EMAIL_HOST_PASSWORD = 'dcpxpldyyktfahbr'
+EMAIL_HOST_PASSWORD = 'halspafhasj'
 
 
 # Celery Settings

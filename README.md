@@ -128,6 +128,70 @@ SwiftShop/
 └── README.md
 ```
 
+## High Level Architecture
+```
+                                  ┌──────────────────────────┐
+                                  │        Browser / User     │
+                                  │ (React + Vite Frontend)   │
+                                  └─────────────┬────────────┘
+                                                │
+                                                │ HTTP Requests (Axios)
+                                                ▼
+                         ┌────────────────────────────────────────────┐
+                         │               Django Backend               │
+                         │        (Django REST Framework API)         │
+                         ├────────────────────────────────────────────┤
+                         │  ✔ Product APIs                            │
+                         │  ✔ Cart / Order APIs                       │
+                         │  ✔ Payment APIs                            │
+                         │  ✔ User Auth (JWT)                         │
+                         │  ✔ Signals (Order/Payment Hooks)           │
+                         └──────┬───────────────┬──────────────┬──────┘
+                                │               │              │
+                                │               │              │
+                                │               │              │
+                    JWT Auth    │     CORS      │     DB ORM   │
+               (Access/Refresh) │ (React <->    │   (SQLite)   │
+                                │  Backend)     │              │
+                                ▼               ▼              ▼
+      ┌──────────────────┐  ┌────────────────┐  ┌────────────────────┐
+      │ django-simplejwt │  │  django-cors    │  │     SQLite DB      │
+      │ (token signing)  │  │  (CORS headers) │  │ Orders, Products…   │
+      └──────────────────┘  └────────────────┘  └────────────────────┘
+
+                                │
+                                │ Signals Trigger
+                                ▼
+                  ┌─────────────────────────────────┐
+                  │        Django Signals            │
+                  │  (post_save on Order/Payment)    │
+                  └─────────────────┬────────────────┘
+                                    │
+                                    │ Push async job
+                                    ▼
+                      ┌─────────────────────────────┐
+                      │        RabbitMQ Queue        │
+                      │  (Message Broker for Celery) │
+                      └──────────────┬──────────────┘
+                                     │
+                                     │ Celery Worker pulls job
+                                     ▼
+                   ┌────────────────────────────────────────┐
+                   │               Celery Worker             │
+                   │  ✔ Generate PDF Invoice                 │
+                   │  ✔ Generate Payment Receipt             │
+                   │  ✔ Send Emails (EmailMessage)           │
+                   │  ✔ Background processing                │
+                   └──────────────────────────┬─────────────┘
+                                              │
+                                              │ Email Delivery
+                                              ▼
+                               ┌────────────────────────────────┐
+                               │         Email SMTP Server      │
+                               │ (Gmail / Mailtrap / Custom)   │
+                               └────────────────────────────────┘
+```
+
 ---
 
 
