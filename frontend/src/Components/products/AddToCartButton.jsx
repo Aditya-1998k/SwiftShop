@@ -2,7 +2,7 @@
 import React, { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
 
-function AddToCartButton({ product }) {
+function AddToCartButton({ product, className }) {
   const { addToCart } = useContext(CartContext);
 
   const handleAdd = (e) => {
@@ -13,7 +13,7 @@ function AddToCartButton({ product }) {
 
   return (
     <button
-      className="mt-2 w-full bg-indigo-600 text-white py-1 rounded-md text-sm hover:bg-indigo-700 transition"
+      className={`px-5 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition ${className}`}
       onClick={handleAdd}
     >
       Add to Cart

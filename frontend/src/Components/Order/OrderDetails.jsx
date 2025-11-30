@@ -128,6 +128,20 @@ function OrderDetails() {
         >
           <FaHeadset /> Support
         </Link>
+        <Link
+          onClick={async () => {
+            try {
+              await apiClient.post(`/order/${order.id}/send-invoice/`);
+              alert("Invoice sent to your email.");
+            } catch (err) {
+              console.error("Invoice send failed:", err);
+              alert("Failed to send invoice.");
+            }
+          }}
+          className="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 cursor-pointer"
+        >
+          📄 Send Invoice
+      </Link>
       </div>
     </div>
   );

@@ -156,5 +156,19 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True
 }
 
-RAZORPAY_KEY_ID="razorpya_key_id"
-RAZORPAY_KEY_SECRET="razorpay_key_secret"
+RAZORPAY_KEY_ID="razorpay_key_id"
+RAZORPAY_KEY_SECRET="secret_key_razorpay"
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ag9889732@gmail.com'
+EMAIL_HOST_PASSWORD = 'email_password'
+
+CELERY_BROKER_URL = "amqp://soa_agent:mypassword@localhost:5672/"
+CELERY_RESULT_BACKEND = "rpc://"
+
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60

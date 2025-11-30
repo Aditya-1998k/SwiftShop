@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaPhone, FaEnvelope, FaMapMarkerAlt,
+  FaLinkedin, FaPhone, FaEnvelope, FaMapMarkerAlt, FaGithub, FaStackOverflow
 } from "react-icons/fa";
 
 
@@ -21,10 +21,9 @@ function Footer() {
 
           {/* Social Icons */}
           <div className="flex gap-4 mt-4">
-            <a href="#" className="hover:text-white"><FaFacebook size={20} /></a>
-            <a href="#" className="hover:text-white"><FaInstagram size={20} /></a>
-            <a href="#" className="hover:text-white"><FaTwitter size={20} /></a>
-            <a href="#" className="hover:text-white"><FaLinkedin size={20} /></a>
+            <a target="blank" href="https://stackoverflow.com/users/20287985/aditya-gupta" className="hover:text-white"><FaStackOverflow size={20} /></a>
+            <a target="blank" href="https://github.com/Aditya-1998k" className="hover:text-white"><FaGithub size={20} /></a>
+            <a target="blank" href="https://www.linkedin.com/in/aditya-gupta1998/" className="hover:text-white"><FaLinkedin size={20} /></a>
           </div>
         </div>
 

@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.db.models import Avg
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializer import CategoryWithProductSerializer, ProductSerializer
+from .serializer import CategoryWithProductSerializer, ProductSerializer, ReviewSerializer
 from .models import Category, Product
 
 
@@ -46,7 +46,24 @@ def products_by_category(request, category_slug):
 def get_product(request, id):
     try:
         product = Product.objects.filter(id=id).first()
-        serializer = ProductSerializer(product).data
-        return Response({"product": serializer}, status=status.HTTP_200_OK)
+        if not product:
+            return Response({"error": "Product not found"}, status=404)
+
+        product_data = ProductSerializer(product).data
+
+        reviews = product.reviews.all().order_by("-created_at")
+        reviews_data = ReviewSerializer(reviews, many=True).data
+
+        avg_rating = reviews.aggregate(Avg("rating"))["rating__avg"]
+        total_reviews = reviews.count()
+
+        return Response({
+            "product": product_data,
+            "reviews": reviews_data,
+            "average_rating": round(avg_rating, 1) if avg_rating else None,
+            "total_reviews": total_reviews
+        }, status=200)
+
     except Exception as e:
-        return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+        print("Error:", e)
+        return Response({"error": "Something went wrong"}, status=500)

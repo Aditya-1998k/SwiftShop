@@ -18,7 +18,7 @@ function Contact() {
     setStatus("⏳ Sending...");
 
     const formData = new FormData();
-    formData.append("access_key", "keep your access key here");
+    formData.append("access_key", "a8627dcf--49be-be30-73012550d669");
     formData.append("name", form.name);
     formData.append("email", form.email);
     formData.append("message", form.message);
