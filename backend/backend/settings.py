@@ -38,17 +38,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # Cors Issue
     'corsheaders',
+
     # Rest Framework app
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    # User Defined Apps
+
+    # User Defined Apps with signals
     "users.apps.UsersConfig",
-    'product',
-    'orders',
+    "orders.apps.OrdersConfig",
     "cart.apps.CartConfig",
-    'payments'
+    "payments.apps.PaymentsConfig",
+    # User defined apps
+    'product'
 ]
 
 MIDDLEWARE = [
@@ -62,6 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# CORS (Allow domains for DRF)
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173"
 ]
@@ -144,31 +149,37 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# Rest Framework Settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
 
+# JWT Settings
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     'BLACKLIST_AFTER_ROTATION': True
 }
 
-RAZORPAY_KEY_ID="razorpay_key_id"
-RAZORPAY_KEY_SECRET="secret_key_razorpay"
+# Payment Gateway configuration
+RAZORPAY_KEY_ID="rzp_test_Rld51u5ruqaffo"
+RAZORPAY_KEY_SECRET="ekVOEAmPCjNqNBCct665TvpI"
 
 
+# GMAIL SMTP Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ag9889732@gmail.com'
-EMAIL_HOST_PASSWORD = 'email_password'
+EMAIL_HOST_PASSWORD = 'dcpxpldyyktfahbr'
 
+
+# Celery Settings
 CELERY_BROKER_URL = "amqp://soa_agent:mypassword@localhost:5672/"
 CELERY_RESULT_BACKEND = "rpc://"
-
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60

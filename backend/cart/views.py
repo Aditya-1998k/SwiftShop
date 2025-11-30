@@ -13,7 +13,6 @@ def add_to_cart(request):
 
     if request.user.is_authenticated:
         cart, _ = Cart.objects.get_or_create(user=request.user)
-
     else:
         if not request.session.session_key:
             request.session.create()
@@ -41,10 +40,12 @@ def add_to_cart(request):
 @api_view(["GET"])
 def get_cart(request):
     if request.user.is_authenticated:
-        cart = Cart.objects.filter(user=request.user).first()
+        cart = Cart.objects.filter(user=request.user)\
+            .first()
     else:
         session_key = request.session.session_key
-        cart = Cart.objects.filter(session_key=session_key).first()
+        cart = Cart.objects.filter(session_key=session_key)\
+            .first()
 
     if not cart:
         return Response({"items": []})

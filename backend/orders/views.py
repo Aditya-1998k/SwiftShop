@@ -5,6 +5,7 @@ from rest_framework import status
 from .serializer import OrderSerializer
 from users.models import Address
 from .models import Order, OrderItem
+from datetime import timedelta
 from .tasks import send_invoice_task
 
 
@@ -152,16 +153,6 @@ def order_details(request, id):
     return Response(data, status=status.HTTP_200_OK)
 
 
-# views.py
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
-
-from .models import Order, OrderTracking
-from datetime import timedelta
-
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def track_order(request, order_id):
@@ -175,7 +166,7 @@ def track_order(request, order_id):
         return Response({"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND)
 
     # ------------------------
-    # Expected Delivery = order_date + 7 days
+    # Expected Delivery = order_date + 7 days (TODO)
     # ------------------------
     expected_delivery = order.created_at + timedelta(days=7)
 
@@ -230,7 +221,6 @@ def track_order(request, order_id):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def send_invoice(request, order_id):
-    # Validate order
     try:
         order = Order.objects.get(id=order_id, user=request.user)
     except Order.DoesNotExist:

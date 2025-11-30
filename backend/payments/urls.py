@@ -5,5 +5,4 @@ urlpatterns = [
     path("create-razorpay-order/", create_razorpay_order),
     path("verify/", verify_payment),
     path("cod-order/", cod_order),
-    
 ]

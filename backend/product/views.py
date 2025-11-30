@@ -8,6 +8,11 @@ from .models import Category, Product
 
 @api_view(["GET"])
 def category_with_products(request):
+    """
+    Fetch all the categories with product
+    Using prefetch related since here Many to Many
+    relation is available
+    """
     try:
         categories = Category.objects\
             .prefetch_related("products__images")\
@@ -23,6 +28,9 @@ def category_with_products(request):
 
 @api_view(["GET"])
 def products_by_category(request, category_slug):
+    """
+    Return all the product of required category
+    """
     try:
         category = Category.objects.get(slug=category_slug, entity_active="Y")
     except Category.DoesNotExist:

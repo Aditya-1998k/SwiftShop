@@ -6,10 +6,6 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView
 )
 
-# router = DefaultRouter()
-# router.register('profile', ProfileViewset, basename='user_profile')
-
-
 urlpatterns = [
     path("profile/", my_profile, name="my profile"),
     path("create_user/", create_user, name="create user"),
@@ -23,5 +19,4 @@ urlpatterns = [
     path("addresses/", get_addresses),
     path("address/add/", add_address),
     path("address/default/<int:pk>/", set_default_address),
-
-] #+ router.urls
+]

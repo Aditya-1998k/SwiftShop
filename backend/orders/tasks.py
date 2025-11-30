@@ -108,7 +108,7 @@ def send_invoice_task(order_id):
     # ------------------------------
     footer = Paragraph(
         "<b>Thank you for shopping with us!</b><br/>"
-        "If you have any questions, contact support@myshop.com",
+        "If you have any questions, contact aditya98gupta.com",
         styles["Normal"]
     )
     elements.append(footer)
