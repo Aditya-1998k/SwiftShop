@@ -95,38 +95,62 @@ Why?
 ```
 frontend/
 │
-├── src/
-│ ├── components/
-│ │ ├── Navbar/
-│ │ ├── Footer/
-│ │ ├── ProductCard.jsx
-│ │ ├── AddToCartButton.jsx
+└── src/
+├── components/
 │ │
-│ ├── pages/
-│ │ ├── Home.jsx
-│ │ ├── Products.jsx
-│ │ ├── ProductItem.jsx
+│ ├── Buy/ # Checkout Flow Components
+│ │ ├── Address.jsx
+│ │ ├── AddressSelector.jsx
 │ │ ├── Cart.jsx
-│ │ ├── Checkout.jsx
-│ │ ├── Orders.jsx
+│ │ ├── Payment.jsx
+│ │
+│ ├── Common/ # Static / Supportive Pages
+│ │ ├── About.jsx
+│ │ ├── Contact.jsx
+│ │ ├── Support.jsx
+│ │
+│ ├── Home/ # Home Page Layout Components
+│ │ ├── Dashboard.jsx
+│ │ ├── Footer.jsx
+│ │ ├── Navbar.jsx
+│ │
+│ ├── Order/ # Orders & Tracking
+│ │ ├── MyOrders.jsx
 │ │ ├── OrderDetails.jsx
+│ │ ├── OrderSuccess.jsx
+│ │ ├── OrderSupport.jsx
+│ │ ├── Support.jsx
 │ │ ├── TrackOrder.jsx
+│ │
+│ ├── Products/ # Product Browsing
+│ │ ├── AddToCartButton.jsx
+│ │ ├── CategoryPage.jsx
+│ │ ├── ProductItem.jsx
+│ │ ├── ProductSection.jsx
+│ │
+│ ├── User/ # Authentication & Profile
+│ │ ├── ChangePassword.jsx
+│ │ ├── ForgotPassword.jsx
 │ │ ├── Login.jsx
-│ │ └── Register.jsx
-│ │
-│ ├── context/
-│ │ ├── CartContext.jsx
-│ │
-│ ├── utils/
-│ │ ├── axios.js
-│ │
-│ ├── App.jsx
-│ ├── main.jsx
-│ └── index.css
+│ │ ├── ProfileModal.jsx
+│ │ ├── Signup.jsx
+│ │ ├── User.jsx
 │
-└── vite.config.js
+├── Data/
+│ ├── dummy.js # Static dummy data for UI
+│
+├── context/
+│ ├── CartContext.jsx # Global cart state
+│
+├── utils/
+│ ├── axios.js # API client with interceptors
+│
+├── App.jsx # Root application component
+├── main.jsx # React entry point
+├── index.css # Global styles
+│
+└── vite.config.js # Vite configuration
 ```
-
 
 ---
 
