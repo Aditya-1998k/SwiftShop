@@ -1,10 +1,15 @@
 import axios from "../../utils/axios";
 import { useState, useEffect } from "react";
 import { FiPhone, FiMapPin, FiUser, FiEdit2 } from "react-icons/fi";
+import EditProfileModal from "./EditProfileModal";
+import EditUserModal from "./EditUserModal";
 
 function User() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [openProfileModal, setOpenProfileModal] = useState(false);
+  const [openUserModal, setOpenUserModal] = useState(false);
 
   const fetchUser = async () => {
     try {
@@ -50,10 +55,24 @@ function User() {
 
           <p className="text-gray-600">{profile.email}</p>
 
-          {/* Edit Button */}
-          <button className="mt-4 px-5 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition flex items-center gap-2">
-            <FiEdit2 size={16} /> Edit Profile
-          </button>
+          {/* Action Buttons */}
+          <div className="flex gap-3 mt-4">
+            {/* Edit User Details */}
+            <button
+              onClick={() => setOpenUserModal(true)}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition flex items-center gap-2"
+            >
+              <FiEdit2 size={16} /> Edit User
+            </button>
+
+            {/* Edit Profile */}
+            <button
+              onClick={() => setOpenProfileModal(true)}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition flex items-center gap-2"
+            >
+              <FiEdit2 size={16} /> Edit Profile
+            </button>
+          </div>
         </div>
 
         {/* Divider */}
@@ -61,7 +80,6 @@ function User() {
 
         {/* Info Section */}
         <div className="space-y-5">
-
           {/* Phone */}
           <div className="flex items-start gap-3">
             <div className="p-2 rounded-lg bg-indigo-100 text-indigo-600">
@@ -94,10 +112,25 @@ function User() {
               <p className="font-semibold">{profile.profile.address || "No address added"}</p>
             </div>
           </div>
-
         </div>
-
       </div>
+
+      {/* Modals */}
+      {openProfileModal && (
+        <EditProfileModal
+          profile={profile.profile}
+          setIsOpen={setOpenProfileModal}
+          refreshProfile={fetchUser}
+        />
+      )}
+
+      {openUserModal && (
+        <EditUserModal
+          user={profile}
+          setIsOpen={setOpenUserModal}
+          refreshProfile={fetchUser}
+        />
+      )}
     </div>
   );
 }

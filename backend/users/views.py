@@ -1,4 +1,4 @@
-from .serializer import UserSerializer, UserProfileSerializer, AddressSerializer
+from .serializer import UserSerializer, UserProfileSerializer, AddressSerializer, ProfileSerializer
 from .models import Address
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
@@ -7,12 +7,45 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def my_profile(request):
     serializer = UserProfileSerializer(request.user)
     return Response(serializer.data)
+
+
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    try:
+        profile = request.user.profile  # get existing profile
+    except:
+        return Response({"error": "Profile not found"}, status=404)
+
+    serializer = ProfileSerializer(profile, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"success": "Profile updated successfully"}, status=200)
+
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_user_data(request):
+    try:
+        user = request.user  # get existing profile
+    except:
+        return Response({"error": "Profile not found"}, status=404)
+
+    serializer = UserSerializer(user, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"success": "Profile updated successfully"}, status=200)
+
+    return Response(serializer.errors, status=400)
 
 
 @api_view(['POST'])

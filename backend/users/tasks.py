@@ -33,3 +33,34 @@ def send_welcome_email_task(user_id):
     email.send()
 
     return f"Welcome email sent to {user.email}"
+
+
+@shared_task
+def send_promotional_emails():
+    try:
+        users = User.objects.filter(profile__promotional_emails=True)
+    except User.DoesNotExist:
+        return "User not found"
+
+    for user in users:
+        email = EmailMessage(
+            subject="🔥 Special Offer Just for You!",
+            body=f"""
+Hi {user.username},
+
+We have new discounts waiting for you.
+Visit SwiftShop now and save more today!
+
+🚀 Limited time offers!
+
+- Team SwiftShop
+""",
+            to=[user.email]
+        )
+
+        try:
+            email.send()
+        except Exception:
+            pass  # log errors if needed
+
+    return f"Sent promotional emails to {users.count()} users"
