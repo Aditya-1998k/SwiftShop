@@ -1,5 +1,10 @@
 from django.urls import path
-from .views import category_with_products, products_by_category, get_product, search_products
+from .views import (
+    category_with_products,
+    products_by_category,
+    get_product,
+    search_products
+)
 
 urlpatterns = [
     path("categories-products/", category_with_products, name="product with category"),

@@ -1,6 +1,14 @@
 from django.urls import path
-from .views import (create_user, logout_view, my_profile, get_addresses, add_address,
-                    set_default_address, update_profile, update_user_data)
+from .views import (
+    create_user,
+    logout_view,
+    my_profile,
+    get_addresses,
+    add_address,
+    set_default_address,
+    update_profile,
+    update_user_data
+)
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,

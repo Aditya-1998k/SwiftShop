@@ -1,5 +1,12 @@
 from django.urls import path
-from .views import create_order, latest_order, user_orders, order_details, track_order, send_invoice
+from .views import (
+    create_order,
+    latest_order,
+    user_orders,
+    order_details,
+    track_order,
+    send_invoice
+)
 
 urlpatterns = [
     path("create/", create_order),
