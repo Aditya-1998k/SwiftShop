@@ -10,6 +10,7 @@ function Navbar() {
   const [searchText, setSearchText] = useState("");
   const [user, setUser] = useState(null);
 
+
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem("token");
 
@@ -38,8 +39,9 @@ function Navbar() {
 
   const handleSearch = () => {
     if (!searchText.trim()) return;
-    window.location.href = `/search?query=${encodeURIComponent(searchText)}`;
+    navigate(`/search?q=${encodeURIComponent(searchText)}`);
   };
+
 
   return (
     <>
@@ -94,19 +96,29 @@ function Navbar() {
 
             {/* ==== SEARCH BAR (Desktop) ==== */}
             <div className="hidden sm:flex items-center bg-white/10 rounded-lg px-3 py-1 max-w-md w-full mx-6">
+              
               <input
                 type="text"
                 placeholder="Search products..."
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
+                
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+
                 className="bg-transparent text-white placeholder-gray-300 focus:outline-none flex-1"
               />
+
               <button
                 onClick={handleSearch}
                 className="ml-2 px-3 py-1 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-500 transition"
               >
                 Search
               </button>
+
             </div>
 
             {/* ==== RIGHT SECTION ==== */}

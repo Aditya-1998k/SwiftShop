@@ -75,21 +75,50 @@ function AddressSelector({ selectedAddress, setSelectedAddress }) {
           <h3 className="font-semibold mb-2">New Address</h3>
 
           <div className="grid grid-cols-2 gap-2">
-            {/* Only show form fields (not is_default) */}
-            {["name", "phone", "line1", "line2", "city", "state", "pincode"].map(
-              (field) => (
+
+          {/* HOME / WORK radio buttons */}
+          <div className="col-span-2 mb-2">
+            <label className="text-sm font-semibold">Address Type</label>
+
+            <div className="flex items-center gap-6 mt-1">
+              {/* HOME */}
+              <label className="flex items-center gap-2 cursor-pointer">
                 <input
-                  key={field}
-                  placeholder={field.toUpperCase()}
-                  className="border p-2 rounded"
-                  value={form[field]}
-                  onChange={(e) =>
-                    setForm({ ...form, [field]: e.target.value })
-                  }
+                  type="radio"
+                  name="name"
+                  value="HOME"
+                  checked={form.name === "HOME"}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
                 />
-              )
-            )}
+                <span>Home</span>
+              </label>
+
+              {/* WORK */}
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="name"
+                  value="WORK"
+                  checked={form.name === "WORK"}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                />
+                <span>Work</span>
+              </label>
+            </div>
           </div>
+
+          {/* Other address fields */}
+          {["phone", "line1", "line2", "city", "state", "pincode"].map((field) => (
+            <input
+              key={field}
+              placeholder={field.toUpperCase()}
+              className="border p-2 rounded"
+              value={form[field]}
+              onChange={(e) => setForm({ ...form, [field]: e.target.value })}
+            />
+          ))}
+        </div>
+
 
           <button
             onClick={handleAdd}

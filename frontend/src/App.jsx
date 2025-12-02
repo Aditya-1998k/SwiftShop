@@ -23,6 +23,7 @@ import FAQ from "./Components/Common/FAQ";
 import About from "./Components/Common/About";
 import Contacts from "./Components/Common/Contacts";
 import OrderSupport from "./Components/Order/OrderSupport";
+import SearchResults from "./Components/products/SearchResult";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/products" element={<ProductSection/>} />
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/product/:id" element={<ProductItem />} />
+          <Route path="/search" element={<SearchResults />} />
           <Route path="/signup" element={<Signup/>}/>
 
           {/* Common */}

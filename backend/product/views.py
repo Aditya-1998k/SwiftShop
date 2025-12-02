@@ -75,3 +75,12 @@ def get_product(request, id):
     except Exception as e:
         print("Error:", e)
         return Response({"error": "Something went wrong"}, status=500)
+
+@api_view(["GET"])
+def search_products(request):
+    query = request.GET.get("q", "")
+
+    products = Product.objects.filter(name__icontains=query)
+    serializer = ProductSerializer(products, many=True)
+
+    return Response({"products": serializer.data})

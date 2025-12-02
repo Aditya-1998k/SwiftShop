@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import AddressSelector from "./Address";
+import AddressSelector from "./AddressSelector";
 import apiClient from "../../utils/axios";
 import { FaCreditCard, FaMoneyBillWave } from "react-icons/fa";
 
