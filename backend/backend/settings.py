@@ -70,7 +70,11 @@ MIDDLEWARE = [
 ]
 
 # CORS (Allow domains for DRF)
-os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+CORS_ALLOWED_ORIGINS = [
+    os.getenv("CORS_ALLOWED_ORIGINS", "").split(","),
+    "http://localhost:5173"
+]
+
 
 # CORS_ALLOW_ALL_ORIGINS = True
 
