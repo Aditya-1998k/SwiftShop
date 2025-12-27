@@ -71,9 +71,10 @@ MIDDLEWARE = [
 
 # CORS (Allow domains for DRF)
 CORS_ALLOWED_ORIGINS = [
-    os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+    origin.strip()
+    for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+    if origin.strip()
 ]
-
 
 # CORS_ALLOW_ALL_ORIGINS = True
 
