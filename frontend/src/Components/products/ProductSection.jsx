@@ -25,7 +25,7 @@ function ProductSection() {
     fetchProduct()
   }, [])
 
-  if (loading) return <p className="text-gray-500 text-center mt-8">Loading tasks...</p>;
+  if (loading) return <p className="text-gray-500 text-center mt-8">Loading Products...</p>;
   if (error) return <p className="text-red-500 text-center mt-8">Error: {error}</p>;
 
   return (

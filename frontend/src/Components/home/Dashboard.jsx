@@ -53,26 +53,6 @@ function Dashboard({ user }) {
             </div>
           ))}
         </div>
-
-        {/* Recommended */}
-        <h2 className="text-xl font-semibold mt-10">
-          {user ? "Recommended for You" : "Popular Items"}
-        </h2>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 mt-4">
-          {recommended.map((item, i) => (
-            <div key={i} className="bg-white p-4 rounded-lg shadow hover:shadow-md">
-              <img src={item.img} className="h-32 object-contain w-full rounded" alt={item.name}/>
-              <h3 className="text-sm font-semibold mt-2">{item.name}</h3>
-              <p className="text-green-600 font-bold">₹{item.price}</p>
-
-              {/* FIX: pass item instead of p */}
-              <AddToCartButton product={item} />
-            </div>
-          ))}
-        </div>
-
-
       </div>
     </div>
   );

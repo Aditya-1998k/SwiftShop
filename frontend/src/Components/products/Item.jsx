@@ -102,7 +102,7 @@ function ProductItem() {
                   <p className="text-gray-700 font-medium">{review.review_text}</p>
 
                   <p className="text-sm text-gray-500 mt-2">
-                    By <strong className="text-gray-800">{review.user_name}</strong>
+                    By <strong className="text-gray-800">{review.user_name.toUpperCase()}</strong>
                   </p>
                 </div>
               ))}

@@ -52,7 +52,7 @@ function OrderSuccess() {
 
       <div className="flex flex-col gap-4">
         <Link
-          to={`/track-order/${order.order_id}`}
+          to={`/orders/${order.order_id}/track`}
           className="w-full bg-blue-600 text-white py-2 text-center rounded hover:bg-blue-700"
         >
           Track Order
