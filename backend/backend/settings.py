@@ -14,6 +14,7 @@ from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 import dj_database_url
+from kombu import Queue
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -195,8 +196,19 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS") == "True"
 
 
-# Celery Settings
+# Celery core
 CELERY_BROKER_URL = "amqp://soa_agent:mypassword@localhost:5672/"
 CELERY_RESULT_BACKEND = "rpc://"
+
+# Reliability
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# FORCE SINGLE QUEUE
+CELERY_TASK_DEFAULT_QUEUE = "celery"
+CELERY_TASK_DEFAULT_EXCHANGE = "celery"
+CELERY_TASK_DEFAULT_ROUTING_KEY = "celery"
+
+CELERY_TASK_QUEUES = (
+    Queue("celery", routing_key="celery"),
+)
