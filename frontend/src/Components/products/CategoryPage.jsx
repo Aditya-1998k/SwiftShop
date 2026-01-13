@@ -1,4 +1,4 @@
-import { useParams} from "react-router-dom";
+import { useParams, useNavigate} from "react-router-dom";
 import { useState, useEffect } from "react";
 import apiClient from "../../utils/axios";
 import AddToCartButton from "./AddToCartButton";
@@ -8,6 +8,7 @@ function CategoryPage() {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
+    const navigate = useNavigate();
 
     const fetchData = async ()=>{
         try{
@@ -42,7 +43,7 @@ function CategoryPage() {
               <div
                 key={p.id}
                 className="border rounded-lg p-3 shadow hover:shadow-md cursor-pointer bg-white"
-                onClick={() => navigate(`/product/${p.slug}`)}
+                onClick={() => navigate(`/product/${p.id}`)}
               >
                 <img
                   src={p.image}
