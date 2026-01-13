@@ -9,3 +9,5 @@ razorpay
 reportlab
 djangorestframework-simplejwt
 gunicorn
+psycopg2-binary
+dj-database-url
