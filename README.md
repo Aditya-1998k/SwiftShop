@@ -1,7 +1,7 @@
-## 🚀 **SwiftShop**  
-### **Django REST Framework · React.js · Celery · Postgres Sql · RabbitMQ**
+## **SwiftShop**  
+### **Django REST Framework · React.js · Celery · Postgres-SQL · RabbitMQ**
 
-Visit Here for Design pricipal: [Link]()
+[Visit Here for Design pricipal](https://github.com/Aditya-1998k/SwiftShop/blob/main/System_Design.md)
 
 
 SwiftShop is a modern, scalable, and fully decoupled e-commerce platform built for both learning and production-ready architecture.  
