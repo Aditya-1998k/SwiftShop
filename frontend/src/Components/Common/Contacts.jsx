@@ -1,9 +1,16 @@
 import { useState } from "react";
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaPaperPlane } from "react-icons/fa";
+import {
+  FaPhone,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaPaperPlane
+} from "react-icons/fa";
 
 function Contact() {
   const [form, setForm] = useState({
-        name: "", email: "", message: "",
+    name: "",
+    email: "",
+    message: "",
   });
 
   const [status, setStatus] = useState("");
@@ -14,7 +21,6 @@ function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setStatus("⏳ Sending...");
 
     const formData = new FormData();
@@ -30,129 +36,159 @@ function Contact() {
       });
 
       const result = await response.json();
-
       if (result.success) {
-        setStatus("Message Sent.");
+        setStatus("✅ Message sent successfully!");
         setForm({ name: "", email: "", message: "" });
       } else {
-        setStatus("Please try again.");
+        setStatus("❌ Please try again.");
       }
-    } catch (error) {
-      setStatus("Error sending message. Please try again later.");
+    } catch {
+      setStatus("❌ Error sending message. Try again later.");
     }
 
-    // Clear status after 5 seconds
-    setTimeout(() => {
-      setStatus("");
-    }, 5000);
+    setTimeout(() => setStatus(""), 5000);
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 mt-10">
-      <h1 className="text-3xl font-bold text-center mb-10">Contact Us</h1>
+    <div className="bg-gray-50 min-h-screen py-16">
+      <div className="max-w-6xl mx-auto px-6">
 
-      <div className="grid md:grid-cols-2 gap-8">
+        {/* ================= HEADER ================= */}
+        <div className="text-center mb-14">
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+            Contact Us
+          </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Have a question, feedback, or need help with your order?
+            We’d love to hear from you.
+          </p>
+        </div>
 
-        {/* Contact Form */}
-        <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">Send Us a Message</h2>
+        <div className="grid lg:grid-cols-2 gap-10">
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* ================= FORM ================= */}
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <h2 className="text-2xl font-semibold mb-6">
+              Send Us a Message
+            </h2>
 
             {status && (
-              <p className="text-center font-medium mb-2">
+              <p className="mb-4 text-center font-medium text-indigo-600">
                 {status}
               </p>
             )}
 
-            {/* Name */}
-            <div>
-              <label className="text-sm font-medium">Your Name</label>
-              <input type="text" name="name"
-                value={form.name} onChange={handleChange}
-                required className="mt-1 w-full p-3 border rounded-lg focus:border-indigo-600 focus:ring"
-                placeholder="Enter your name"
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-5">
 
-            {/* Email */}
-            <div>
-              <label className="text-sm font-medium">Email Address</label>
-              <input type="email" name="email" value={form.email}
-                onChange={handleChange} required
-                className="mt-1 w-full p-3 border rounded-lg focus:border-indigo-600 focus:ring"
-                placeholder="Enter your email"
-              />
-            </div>
-
-            {/* Message */}
-            <div>
-              <label className="text-sm font-medium">Message</label>
-              <textarea name="message" value={form.message}
-                onChange={handleChange} required
-                className="mt-1 w-full p-3 border rounded-lg h-32 resize-none focus:border-indigo-600 focus:ring"
-                placeholder="Write your message..."
-              />
-            </div>
-
-            {/* Submit */}
-            <button
-              type="submit"
-              className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition flex items-center justify-center gap-2"
-            >
-              <FaPaperPlane />
-              Send Message
-            </button>
-          </form>
-        </div>
-
-        {/* Contact Info */}
-        <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">Get In Touch</h2>
-
-          <div className="space-y-5">
-
-            {/* Phone */}
-            <div className="flex items-center gap-4">
-              <FaPhone className="text-indigo-600 text-xl" />
               <div>
-                <p className="text-sm text-gray-500">Phone</p>
-                <p className="font-medium">+91 9643652605</p>
+                <label className="text-sm font-medium text-gray-700">
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter your name"
+                  className="mt-2 w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
               </div>
-            </div>
 
-            {/* Email */}
-            <div className="flex items-center gap-4">
-              <FaEnvelope className="text-indigo-600 text-xl" />
               <div>
-                <p className="text-sm text-gray-500">Email</p>
-                <p className="font-medium">aditya98gupta@gmail.com</p>
+                <label className="text-sm font-medium text-gray-700">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter your email"
+                  className="mt-2 w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
               </div>
-            </div>
 
-            {/* Address */}
-            <div className="flex items-start gap-4">
-              <FaMapMarkerAlt className="text-indigo-600 text-xl mt-1" />
               <div>
-                <p className="text-sm text-gray-500">Address</p>
-                <p className="font-medium">
-                  SwiftShop HQ, Bangalore, Karnataka, India
-                </p>
+                <label className="text-sm font-medium text-gray-700">
+                  Message
+                </label>
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  required
+                  placeholder="Write your message..."
+                  rows={5}
+                  className="mt-2 w-full px-4 py-3 border rounded-xl resize-none focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
               </div>
-            </div>
 
+              <button
+                type="submit"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2"
+              >
+                <FaPaperPlane />
+                Send Message
+              </button>
+            </form>
           </div>
 
-          {/* Map */}
-          <div className="mt-6">
+          {/* ================= INFO ================= */}
+          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col">
+            <h2 className="text-2xl font-semibold mb-6">
+              Get In Touch
+            </h2>
+
+            <div className="space-y-6 mb-8">
+
+              <div className="flex gap-4">
+                <div className="p-3 rounded-xl bg-indigo-100 text-indigo-600">
+                  <FaPhone />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Phone</p>
+                  <p className="font-semibold text-gray-900">
+                    +91 9643652605
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="p-3 rounded-xl bg-indigo-100 text-indigo-600">
+                  <FaEnvelope />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Email</p>
+                  <p className="font-semibold text-gray-900">
+                    aditya98gupta@gmail.com
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="p-3 rounded-xl bg-indigo-100 text-indigo-600">
+                  <FaMapMarkerAlt />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Address</p>
+                  <p className="font-semibold text-gray-900">
+                    SwiftShop HQ, Bangalore, Karnataka, India
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* MAP */}
             <iframe
               title="map"
               src="https://maps.google.com/maps?q=bangalore&t=&z=13&ie=UTF8&iwloc=&output=embed"
-              className="w-full h-56 rounded-xl border"
+              className="w-full h-56 rounded-xl border mt-auto"
             ></iframe>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
   );

@@ -2,14 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "../../utils/axios";
 import ProfileModal from "../users/ProfileModal";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaSearch } from "react-icons/fa";
 
 function Navbar() {
   const [showProfile, setShowProfile] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [user, setUser] = useState(null);
-
 
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem("token");
@@ -27,49 +26,38 @@ function Navbar() {
     try {
       const refresh = localStorage.getItem("refresh");
       await axios.post("users/api/token/refresh/", { refresh });
-    } catch (e) {
-      console.error("Logout error", e);
-    }
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("refresh");
+    } catch {}
+    localStorage.clear();
     setShowProfile(false);
     navigate("/");
   };
 
   const handleSearch = () => {
     if (!searchText.trim()) return;
-    navigate(`/search?q=${encodeURIComponent(searchText)}`);
-  };
 
+    navigate(`/search?q=${encodeURIComponent(searchText)}`);
+
+    setSearchText("");
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <>
-      <nav className="bg-black/90 border-b border-white/10 backdrop-blur-md">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
 
-            {/* ==== LEFT SECTION ==== */}
+            {/* ================= LEFT ================= */}
             <div className="flex items-center gap-4">
 
-              {/* Mobile Menu Button */}
+              {/* Mobile Menu */}
               <button
-                className="sm:hidden text-white"
+                className="sm:hidden text-white hover:text-indigo-400 transition"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
+                <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
 
@@ -77,57 +65,45 @@ function Navbar() {
               <Link to="/" className="flex items-center gap-2">
                 <img
                   src="https://www.svgrepo.com/show/501826/shop.svg"
-                  className="h-8 w-auto"
+                  className="h-8"
                   alt="SwiftShop"
                 />
-                <span className="text-white font-bold text-lg">SwiftShop</span>
+                <span className="text-white font-extrabold text-lg tracking-wide">
+                  SwiftShop
+                </span>
               </Link>
 
-              {/* Desktop Nav Links */}
-              <div className="hidden sm:flex items-center gap-4 ml-4">
+              {/* Desktop Links */}
+              <div className="hidden sm:flex gap-3 ml-6">
                 <Link
                   to="/products"
-                  className="px-3 py-2 text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 rounded-md transition"
+                  className="px-3 py-2 text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition"
                 >
                   Products
                 </Link>
               </div>
             </div>
 
-            {/* ==== SEARCH BAR (Desktop) ==== */}
-            <div className="hidden sm:flex items-center bg-white/10 rounded-lg px-3 py-1 max-w-md w-full mx-6">
-              
+            {/* ================= SEARCH (DESKTOP) ================= */}
+            <div className="hidden sm:flex items-center bg-white/10 rounded-xl px-4 py-2 w-full max-w-lg mx-6">
+              <FaSearch className="text-gray-300 mr-3" />
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Search for products..."
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleSearch();
-                  }
-                }}
-
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 className="bg-transparent text-white placeholder-gray-300 focus:outline-none flex-1"
               />
-
-              <button
-                onClick={handleSearch}
-                className="ml-2 px-3 py-1 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-500 transition"
-              >
-                Search
-              </button>
-
             </div>
 
-            {/* ==== RIGHT SECTION ==== */}
+            {/* ================= RIGHT ================= */}
             <div className="hidden sm:flex items-center gap-5">
 
-              {/* Cart Button */}
+              {/* Cart */}
               <Link
                 to="/cart"
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 rounded-md transition"
+                className="relative flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition"
               >
                 <FaShoppingCart size={18} />
                 Cart
@@ -140,60 +116,67 @@ function Navbar() {
                     fetchUser();
                     setShowProfile(true);
                   }}
-                  className="rounded-full p-1 hover:bg-white/20 transition"
+                  className="hover:ring-2 hover:ring-indigo-500 rounded-full transition"
                 >
                   <img
                     src="https://ui-avatars.com/api/?name=User"
                     alt="profile"
-                    className="h-8 w-8 rounded-full border border-white/30"
+                    className="h-9 w-9 rounded-full border border-white/30"
                   />
                 </button>
               ) : (
                 <Link
                   to="/login"
-                  className="px-3 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-md transition"
+                  className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition"
                 >
                   Login
                 </Link>
               )}
-
             </div>
           </div>
 
-          {/* ==== MOBILE MENU ==== */}
+          {/* ================= MOBILE MENU ================= */}
           {isMobileMenuOpen && (
-            <div className="sm:hidden mt-2 bg-black/80 p-4 rounded-lg space-y-3">
+            <div className="sm:hidden mt-3 bg-black/90 rounded-xl p-4 space-y-4 shadow-xl">
 
               {/* Mobile Search */}
-              <div className="flex bg-white/10 rounded-lg px-3 py-2">
+              <div className="flex items-center bg-white/10 rounded-lg px-3 py-2">
+                <FaSearch className="text-gray-300 mr-2" />
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder="Search products..."
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
                   className="bg-transparent text-white flex-1 placeholder-gray-300 focus:outline-none"
                 />
                 <button
                   onClick={handleSearch}
-                  className="ml-2 px-3 py-1 bg-indigo-600 text-white text-sm rounded-md"
+                  className="ml-2 px-3 py-1 bg-indigo-600 text-white text-sm rounded-lg"
                 >
                   Go
                 </button>
               </div>
 
-              {/* Mobile Nav Items */}
-              <Link to="/products" className="block text-gray-200 hover:text-white py-1">
+              <Link
+                to="/products"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-gray-200 hover:text-white"
+              >
                 Products
               </Link>
 
-              <Link to="/cart" className="block text-gray-200 hover:text-white py-1">
+              <Link
+                to="/cart"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-gray-200 hover:text-white"
+              >
                 Cart
               </Link>
 
               {isLoggedIn && (
                 <button
                   onClick={handleLogout}
-                  className="mt-3 w-full bg-red-600 text-white py-2 rounded-md"
+                  className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition"
                 >
                   Logout
                 </button>
@@ -203,7 +186,7 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Profile Modal */}
+      {/* PROFILE MODAL */}
       <ProfileModal
         open={showProfile}
         user={user}

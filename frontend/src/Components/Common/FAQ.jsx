@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 
 function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -28,7 +28,7 @@ function FAQ() {
     {
       question: "How do I contact support?",
       answer:
-        "Use the Support button on the order page or email us at support@swiftshop.com.",
+        "Use the Support button on the order page or email us at aditya98gupta@gmail.com.",
     },
   ];
 
@@ -37,32 +37,53 @@ function FAQ() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 mb-20 p-6 bg-white shadow-lg rounded-xl">
-      <h1 className="text-3xl font-bold text-center mb-6">Frequently Asked Questions</h1>
+    <div className="bg-gray-50 min-h-screen py-14">
+      <div className="max-w-4xl mx-auto px-6">
 
-      <div className="space-y-4">
-        {faqs.map((faq, index) => (
-          <div
-            key={index}
-            className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:shadow"
-            onClick={() => toggleFAQ(index)}
-          >
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold">{faq.question}</h3>
-              {openIndex === index ? (
-                <FaChevronUp className="text-indigo-600" />
-              ) : (
-                <FaChevronDown className="text-gray-500" />
-              )}
-            </div>
+        {/* ================= HEADER ================= */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-3">
+            Frequently Asked Questions
+          </h1>
+          <p className="text-gray-600">
+            Everything you need to know about shopping on SwiftShop
+          </p>
+        </div>
 
-            {openIndex === index && (
-              <p className="mt-3 text-gray-700 leading-relaxed">
-                {faq.answer}
-              </p>
-            )}
-          </div>
-        ))}
+        {/* ================= FAQ LIST ================= */}
+        <div className="bg-white rounded-2xl shadow-lg divide-y">
+
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+
+            return (
+              <div
+                key={index}
+                className="p-6 cursor-pointer hover:bg-gray-50 transition"
+                onClick={() => toggleFAQ(index)}
+              >
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {faq.question}
+                  </h3>
+
+                  <FaChevronDown
+                    className={`text-indigo-600 transition-transform ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+
+                {isOpen && (
+                  <p className="mt-4 text-gray-600 leading-relaxed">
+                    {faq.answer}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+
+        </div>
       </div>
     </div>
   );

@@ -1,83 +1,107 @@
 import { Link } from "react-router-dom";
-import { FaSignOutAlt, FaUser, FaShoppingBag, FaShoppingCart } from "react-icons/fa";
+import {
+  FaSignOutAlt,
+  FaUser,
+  FaShoppingBag,
+  FaShoppingCart
+} from "react-icons/fa";
 
 function ProfileModal({ open, onClose, onLogout, user }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white w-80 rounded-2xl shadow-2xl p-7 relative animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="relative w-[340px] bg-white rounded-2xl shadow-2xl overflow-hidden animate-scaleIn">
 
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
-        >
-          ✕
-        </button>
+        {/* ===== HEADER ===== */}
+        <div className="bg-gradient-to-r from-indigo-600 to-indigo-500 px-6 py-6 text-center text-white relative">
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 text-white/80 hover:text-white transition"
+          >
+            ✕
+          </button>
 
-        {/* Profile Avatar */}
-        <div className="flex justify-center">
           <img
             src="https://www.reshot.com/preview-assets/icons/68ZR2F7VPJ/user-profile-68ZR2F7VPJ.svg"
-            className="h-20 w-20 rounded-full shadow-lg border-2 border-indigo-600 p-1 bg-white"
+            className="h-20 w-20 mx-auto rounded-full bg-white p-2 shadow-md"
             alt="Profile"
           />
+
+          <h2 className="mt-3 text-lg font-semibold">
+            {user?.first_name} {user?.last_name}
+          </h2>
+
+          <p className="text-sm text-indigo-100">
+            {user?.email}
+          </p>
         </div>
 
-        {/* User Info */}
-        <h2 className="text-xl font-bold text-gray-800 text-center mt-4">
-          {user?.first_name} {user?.last_name}
-        </h2>
-        <p className="text-gray-500 text-center text-sm">{user?.email}</p>
-
-        <hr className="my-4" />
-
-        {/* Action Buttons */}
-        <div className="space-y-3">
+        {/* ===== BODY ===== */}
+        <div className="p-5 space-y-2">
 
           <Link
             to="/user"
             onClick={onClose}
-            className="flex items-center gap-3 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition w-full"
+            className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-100 transition"
           >
-            <FaUser /> View Full Profile
+            <FaUser className="text-indigo-600" />
+            <span className="font-medium text-gray-800">
+              View Profile
+            </span>
           </Link>
 
           <Link
             to="/my-orders"
             onClick={onClose}
-            className="flex items-center gap-3 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition w-full"
+            className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-100 transition"
           >
-            <FaShoppingBag /> My Orders
+            <FaShoppingBag className="text-indigo-600" />
+            <span className="font-medium text-gray-800">
+              My Orders
+            </span>
           </Link>
 
           <Link
             to="/cart"
             onClick={onClose}
-            className="flex items-center gap-3 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition w-full"
+            className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-100 transition"
           >
-            <FaShoppingCart /> My Cart
+            <FaShoppingCart className="text-indigo-600" />
+            <span className="font-medium text-gray-800">
+              My Cart
+            </span>
           </Link>
+
+          <hr className="my-3" />
 
           <button
             onClick={onLogout}
-            className="flex items-center gap-3 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 w-full transition"
+            className="flex items-center gap-4 p-3 w-full rounded-xl hover:bg-red-50 text-red-600 transition"
           >
-            <FaSignOutAlt /> Sign Out
+            <FaSignOutAlt />
+            <span className="font-medium">
+              Sign Out
+            </span>
           </button>
         </div>
       </div>
 
-      {/* Simple fade animation */}
+      {/* ===== ANIMATION ===== */}
       <style>
         {`
-          .animate-fadeIn {
-            animation: fadeIn 0.2s ease-in-out;
+          .animate-scaleIn {
+            animation: scaleIn 0.2s ease-out;
           }
-          @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+          @keyframes scaleIn {
+            from {
+              opacity: 0;
+              transform: scale(0.95);
+            }
+            to {
+              opacity: 1;
+              transform: scale(1);
+            }
           }
         `}
       </style>

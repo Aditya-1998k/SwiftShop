@@ -5,81 +5,108 @@ import apiClient from "../../utils/axios";
 
 function ProductSection() {
   const navigate = useNavigate();
-  const [category, setCategory] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
+  const [category, setCategory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const fetchProduct = async () => {
-    try{
+    try {
       const response = await apiClient.get("product/categories-products/");
-      setCategory(response.data)
-    } catch (err){
-      console.log(err)
-      setError(err)
+      setCategory(response.data);
+    } catch (err) {
+      setError("Failed to load products");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  useEffect(()=>{
-    fetchProduct()
-  }, [])
+  useEffect(() => {
+    fetchProduct();
+  }, []);
 
-  if (loading) return <p className="text-gray-500 text-center mt-8">Loading Products...</p>;
-  if (error) return <p className="text-red-500 text-center mt-8">Error: {error}</p>;
+  if (loading)
+    return (
+      <p className="text-gray-500 text-center mt-10 text-lg">
+        Loading products...
+      </p>
+    );
+
+  if (error)
+    return (
+      <p className="text-red-500 text-center mt-10 text-lg">
+        {error}
+      </p>
+    );
 
   return (
-    <div className="mt-8">
+    <div className="space-y-12 mt-10">
 
       {category.categories.map((cat) => (
-        <div 
-          key={cat.id} 
-          className="bg-white p-4 rounded-xl shadow mb-8"
+        <section
+          key={cat.id}
+          className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-md p-6"
         >
 
-          {/* Category Header */}
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">{cat.name}</h2>
+          {/* ================= CATEGORY HEADER ================= */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-extrabold text-gray-800">
+              {cat.name}
+            </h2>
 
             <button
               onClick={() => navigate(`/category/${cat.slug}`)}
-              className="text-indigo-600 hover:underline text-sm"
+              className="text-indigo-600 font-medium hover:underline"
             >
-              View All
+              View all →
             </button>
           </div>
 
-          {/* Products inside a category */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          {/* ================= PRODUCTS ================= */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
             {cat.products.slice(0, 5).map((p) => (
               <div
                 key={p.id}
-                className="border rounded-lg p-3 shadow hover:shadow-md cursor-pointer bg-white"
+                className="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition duration-300 cursor-pointer overflow-hidden"
                 onClick={() => navigate(`/product/${p.id}`)}
               >
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  className="h-32 w-full object-contain mb-2 rounded"
-                />
 
-                <h3 className="text-sm font-semibold">{p.name}</h3>
+                {/* IMAGE */}
+                <div className="bg-gray-100 p-4 flex items-center justify-center">
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    className="h-36 object-contain group-hover:scale-105 transition"
+                  />
+                </div>
 
-                <p className="text-green-600 font-bold">
-                  ₹{p.price || 999}
-                </p>
+                {/* CONTENT */}
+                <div className="p-4 space-y-2">
+                  <h3 className="text-sm font-semibold text-gray-800 line-clamp-2">
+                    {p.name}
+                  </h3>
 
-                <AddToCartButton product={p} />
+                  <p className="text-xl font-bold text-indigo-600">
+                    ₹{p.price || 999}
+                  </p>
+
+                  {/* Prevent click bubbling */}
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <AddToCartButton
+                      product={p}
+                      className="w-full mt-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg transition"
+                    />
+                  </div>
+                </div>
               </div>
             ))}
           </div>
 
-        </div>
+        </section>
       ))}
-
     </div>
   );
-
 }
 
 export default ProductSection;

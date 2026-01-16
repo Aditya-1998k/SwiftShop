@@ -15,9 +15,9 @@ function User() {
     try {
       const res = await axios.get("users/profile/");
       setProfile(res.data);
-      setLoading(false);
     } catch (err) {
       console.log("Profile fetch error:", err);
+    } finally {
       setLoading(false);
     }
   };
@@ -27,95 +27,109 @@ function User() {
   }, []);
 
   if (loading)
-    return <p className="text-center mt-10 text-gray-600 text-lg">Loading profile...</p>;
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center text-gray-500 text-lg">
+        Loading profile...
+      </div>
+    );
 
   if (!profile)
-    return <p className="text-center mt-10 text-red-500 text-lg">Failed to load profile</p>;
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center text-red-500 text-lg">
+        Failed to load profile
+      </div>
+    );
 
   return (
-    <div className="max-w-xl mx-auto mt-10">
+    <div className="bg-gray-50 min-h-screen py-12">
+      <div className="max-w-4xl mx-auto px-6">
 
-      {/* Glass UI Card */}
-      <div className="bg-white/90 backdrop-blur-lg shadow-xl rounded-2xl p-8 border border-gray-200">
+        {/* ================= HEADER ================= */}
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-8">
+          My Account
+        </h1>
 
-        {/* Top Section */}
-        <div className="flex flex-col items-center">
-          <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-indigo-500 shadow-md">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+
+          {/* ================= TOP CARD ================= */}
+          <div className="bg-gradient-to-r from-indigo-600 to-indigo-500 p-8 text-white flex flex-col sm:flex-row sm:items-center gap-6">
             <img
               src="https://www.reshot.com/preview-assets/icons/68ZR2F7VPJ/user-profile-68ZR2F7VPJ.svg"
               alt="Profile"
-              className="w-full h-full object-cover"
+              className="h-24 w-24 rounded-full bg-white p-2 shadow-md"
             />
-          </div>
 
-          <h2 className="text-2xl font-bold mt-4 flex items-center gap-2">
-            <FiUser className="text-indigo-600" />
-            {profile.first_name} {profile.last_name}
-          </h2>
-
-          <p className="text-gray-600">{profile.email}</p>
-
-          {/* Action Buttons */}
-          <div className="flex gap-3 mt-4">
-            {/* Edit User Details */}
-            <button
-              onClick={() => setOpenUserModal(true)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition flex items-center gap-2"
-            >
-              <FiEdit2 size={16} /> Edit User
-            </button>
-
-            {/* Edit Profile */}
-            <button
-              onClick={() => setOpenProfileModal(true)}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition flex items-center gap-2"
-            >
-              <FiEdit2 size={16} /> Edit Profile
-            </button>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="my-6 border-t border-gray-300"></div>
-
-        {/* Info Section */}
-        <div className="space-y-5">
-          {/* Phone */}
-          <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-indigo-100 text-indigo-600">
-              <FiPhone size={20} />
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold">
+                {profile.first_name} {profile.last_name}
+              </h2>
+              <p className="text-indigo-100">{profile.email}</p>
             </div>
-            <div>
-              <p className="text-xs text-gray-500">Phone</p>
-              <p className="font-semibold">{profile.profile.phone || "Not added"}</p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setOpenUserModal(true)}
+                className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl transition flex items-center gap-2"
+              >
+                <FiEdit2 /> Edit User
+              </button>
+
+              <button
+                onClick={() => setOpenProfileModal(true)}
+                className="bg-white text-indigo-600 hover:bg-indigo-50 px-4 py-2 rounded-xl transition flex items-center gap-2"
+              >
+                <FiEdit2 /> Edit Profile
+              </button>
             </div>
           </div>
 
-          {/* Bio */}
-          <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-indigo-100 text-indigo-600">
-              <FiUser size={20} />
-            </div>
-            <div>
-              <p className="text-xs text-gray-500">Bio</p>
-              <p className="font-semibold">{profile.profile.bio || "No bio available"}</p>
-            </div>
-          </div>
+          {/* ================= DETAILS ================= */}
+          <div className="p-8 grid sm:grid-cols-2 gap-8">
 
-          {/* Address */}
-          <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-indigo-100 text-indigo-600">
-              <FiMapPin size={20} />
+            {/* Phone */}
+            <div className="flex gap-4">
+              <div className="p-3 rounded-xl bg-indigo-100 text-indigo-600">
+                <FiPhone size={20} />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Phone</p>
+                <p className="font-semibold text-gray-900">
+                  {profile.profile.phone || "Not added"}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs text-gray-500">Address</p>
-              <p className="font-semibold">{profile.profile.address || "No address added"}</p>
+
+            {/* Bio */}
+            <div className="flex gap-4">
+              <div className="p-3 rounded-xl bg-indigo-100 text-indigo-600">
+                <FiUser size={20} />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Bio</p>
+                <p className="font-semibold text-gray-900">
+                  {profile.profile.bio || "No bio available"}
+                </p>
+              </div>
             </div>
+
+            {/* Address */}
+            <div className="flex gap-4 sm:col-span-2">
+              <div className="p-3 rounded-xl bg-indigo-100 text-indigo-600">
+                <FiMapPin size={20} />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Address</p>
+                <p className="font-semibold text-gray-900">
+                  {profile.profile.address || "No address added"}
+                </p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
-      {/* Modals */}
+      {/* ================= MODALS ================= */}
       {openProfileModal && (
         <EditProfileModal
           profile={profile.profile}

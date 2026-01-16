@@ -35,114 +35,141 @@ const Signup = () => {
   }
 
 
-  return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          src="https://www.svgrepo.com/show/501826/shop.svg"
-          alt="Task Tracker"
-          className="mx-auto h-10 w-auto"
-        />
-        <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-black">
-          Sign in to your account
-        </h2>
-      </div>
+return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-6">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        {/* HEADER */}
+        <div className="text-center">
+          <img
+            src="https://www.svgrepo.com/show/501826/shop.svg"
+            alt="SwiftShop"
+            className="mx-auto h-10 w-auto"
+          />
+          <h2 className="mt-6 text-2xl font-bold text-gray-900">
+            Create your account
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Join SwiftShop for seamless shopping
+          </p>
+        </div>
 
-        <form onSubmit={handleSignup} className="space-y-6">
+        {/* FORM */}
+        <form onSubmit={handleSignup} className="space-y-5 mt-8">
+
+          {/* USERNAME */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Username
+            </label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
+              required
+              autoComplete="username"
+              className="mt-2 w-full px-4 py-2.5 rounded-xl border border-gray-300
+                         focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            />
+          </div>
+
+          {/* EMAIL */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email address
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              className="mt-2 w-full px-4 py-2.5 rounded-xl border border-gray-300
+                         focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            />
+          </div>
+
+          {/* NAME ROW */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="username" className="block text-sm/6 font-medium text-black-100">
-                Username
+              <label className="block text-sm font-medium text-gray-700">
+                First name
               </label>
-              <div className="mt-2">
-                <input
-                  id="username" type="username" name="username" value={username}
-                  onChange={(e) => setUserName(e.target.value)}
-                  required autoComplete="username"
-                  className="block w-full rounded-md bg-black/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
+              <input
+                type="text"
+                value={first_name}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+                className="mt-2 w-full px-4 py-2.5 rounded-xl border border-gray-300
+                           focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm/6 font-medium text-black-100">
-                Email address
+              <label className="block text-sm font-medium text-gray-700">
+                Last name
               </label>
-              <div className="mt-2">
-                <input
-                  id="email" type="email" name="email" value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required autoComplete="email"
-                  className="block w-full rounded-md bg-black/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
+              <input
+                type="text"
+                value={last_name}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+                className="mt-2 w-full px-4 py-2.5 rounded-xl border border-gray-300
+                           focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              />
             </div>
+          </div>
 
-            <div>
-              <label htmlFor="first_name" className="block text-sm/6 font-medium text-black-100">
-                First Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="first_name" type="first_name" name="first_name" value={first_name}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  required autoComplete="first_name"
-                  className="block w-full rounded-md bg-black/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
+          {/* PASSWORD */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="new-password"
+              className="mt-2 w-full px-4 py-2.5 rounded-xl border border-gray-300
+                         focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            />
+          </div>
 
-            <div>
-              <label htmlFor="last_name" className="block text-sm/6 font-medium text-black-100">
-                Last Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="last_name" type="last_name" name="last_name" value={last_name}
-                  onChange={(e) => setLastName(e.target.value)}
-                  required autoComplete="last_name"
-                  className="block w-full rounded-md bg-black/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
+          {/* ERROR */}
+          {error && (
+            <p className="text-sm text-red-500 text-center">
+              {error}
+            </p>
+          )}
 
-            <div>
-                <label htmlFor="password" className="block text-sm/6 font-medium text-black-100">
-                  Password
-                </label>
-              <div className="mt-2">
-                <input
-                  id="password" type="password" name="password" value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required autoComplete="current-password"
-                  className="block w-full rounded-md bg-black/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-black/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
+          {/* LOADING */}
+          {loading && (
+            <p className="text-sm text-gray-500 text-center">
+              Registering user...
+            </p>
+          )}
 
-            {error && (
-              <p className="text-red-500 text-sm text-center mt-2"> {error}  </p>
-            )}
+          {/* SUBMIT */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-indigo-600 hover:bg-indigo-700
+                       text-white py-2.5 rounded-xl font-semibold
+                       transition disabled:opacity-50"
+          >
+            {loading ? "Please wait..." : "Create Account"}
+          </button>
+        </form>
 
-            {loading && (
-              <p className="text-gray-500 text-sm text-center mt-2">  Registering User... </p>
-            )}
-
-            <div>
-              <button
-                type="submit" disabled={loading} // Prevent Double click
-                className="flex w-full justify-center rounded-md bg-green-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-black-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500 disabled:opacity-50"
-              >
-                {loading ? "Please wait..." : "Registering User"}
-              </button>
-            </div>
-          </form>
-
-        <p className="mt-10 text-center text-sm/6 text-gray-400">
-          Already a member?
-          <Link to="/login" className="font-semibold text-indigo-400 hover:text-green-300">
-            Please Login.
+        {/* LOGIN LINK */}
+        <p className="mt-8 text-center text-sm text-gray-500">
+          Already a member?{" "}
+          <Link
+            to="/login"
+            className="font-semibold text-indigo-600 hover:underline"
+          >
+            Log in
           </Link>
         </p>
       </div>
