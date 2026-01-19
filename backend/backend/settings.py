@@ -212,3 +212,16 @@ CELERY_TASK_DEFAULT_ROUTING_KEY = "celery"
 CELERY_TASK_QUEUES = (
     Queue("celery", routing_key="celery"),
 )
+
+# Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "127.0.0.1:11211",
+        "TIMEOUT": 300,   # 5 minutes
+        "OPTIONS": {
+            "no_delay": True,
+            "ignore_exc": True,
+        }
+    }
+}

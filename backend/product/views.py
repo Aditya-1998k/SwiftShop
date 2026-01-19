@@ -1,53 +1,74 @@
 from django.db.models import Avg
 from rest_framework.decorators import api_view
+from django.core.cache import cache
 from rest_framework.response import Response
 from rest_framework import status
 from .serializer import CategoryWithProductSerializer, ProductSerializer, ReviewSerializer
-from .models import Category, Product
-
+from .models import Category, Product, Review
 
 @api_view(["GET"])
 def category_with_products(request):
     """
-    Fetch all the categories with product
-    Using prefetch related since here Many to Many
-    relation is available
+    Fetch all categories with products
+    Cached forever (until manually invalidated or evicted)
     """
-    try:
-        categories = Category.objects\
-            .prefetch_related("products__images")\
+    cache_key = "category_with_products"
+
+    data = cache.get(cache_key)
+
+    if data is None:
+        categories = (
+            Category.objects
+            .prefetch_related("products__images")
             .filter(entity_active="Y")
-        
-        data = CategoryWithProductSerializer(categories, many=True).data
-        return Response({"categories": data}, status=status.HTTP_200_OK)
-    except Exception as e:
-        return Response(
-            {"error": f"Unable to fetch due to error {e}"},
-            status=status.HTTP_400_BAD_REQUEST
         )
+        data = CategoryWithProductSerializer(categories, many=True).data
+        cache.set(cache_key, data, timeout=None)
+
+    return Response(
+        {"categories": data},
+        status=status.HTTP_200_OK
+    )
 
 @api_view(["GET"])
 def products_by_category(request, category_slug):
     """
-    Return all the product of required category
+    Return all active products for a category
+    Cached forever (manual invalidation)
     """
+    cache_key = category_slug
+
+    data = cache.get(cache_key)
+    if data is not None:
+        return Response(data, status=status.HTTP_200_OK)
+
     try:
-        category = Category.objects.get(slug=category_slug, entity_active="Y")
+        category = Category.objects.get(
+            slug=category_slug,
+            entity_active="Y"
+        )
     except Category.DoesNotExist:
-        return Response({"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {"error": "Category not found"},
+            status=status.HTTP_404_NOT_FOUND
+        )
 
-    # Fetch all active products in that category
-    products = Product.objects.filter(
-        category=category,
-        entity_active="Y"
-    ).prefetch_related("images")
+    products = (
+        Product.objects
+        .filter(category=category, entity_active="Y")
+        .prefetch_related("images")
+    )
 
-    serializer = ProductSerializer(products, many=True)
-    return Response({
+    data = {
         "category": category.name,
         "category_slug": category.slug,
-        "products": serializer.data
-    })
+        "products": ProductSerializer(products, many=True).data
+    }
+
+    cache.set(cache_key, data, timeout=None)
+
+    return Response(data, status=status.HTTP_200_OK)
+
 
 
 @api_view(["GET"])
@@ -84,3 +105,21 @@ def search_products(request):
     serializer = ProductSerializer(products, many=True)
 
     return Response({"products": serializer.data})
+
+
+@api_view(["POST"])
+def add_product_review(request, id):
+    rating = request.data.get("rating")
+    review_text = request.data.get("review_text")
+    try:
+        product = Product.objects.get(id=id)
+    except Product.DoesNotExist:
+        return Response({"message": "Item does not exist"})
+
+    Review.objects.create(
+        product=product,
+        rating=rating,
+        user=request.user,
+        review_text=review_text
+    )
+    return Response({"message": "Review added successfully"}, status=status.HTTP_201_CREATED)

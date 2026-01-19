@@ -3,7 +3,8 @@ from .views import (
     category_with_products,
     products_by_category,
     get_product,
-    search_products
+    search_products,
+    add_product_review
 )
 
 urlpatterns = [
@@ -11,4 +12,5 @@ urlpatterns = [
     path("category/<slug:category_slug>/products/", products_by_category),
     path("product/<int:id>/", get_product),
     path("search/", search_products),
+    path("product/<int:id>/review/", add_product_review),
 ]

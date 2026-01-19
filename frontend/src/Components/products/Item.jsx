@@ -25,6 +25,7 @@ function ProductItem() {
       const res = await apiClient.get(`product/product/${id}/`);
       setProduct(res.data.product);
       setReviews(res.data.reviews);
+      console.log(res.data.reviews)
     } catch (err) {
       console.error(err);
     } finally {
@@ -44,7 +45,7 @@ function ProductItem() {
     try {
       await apiClient.post(`product/product/${id}/review/`, {
         rating,
-        review_text: reviewText,
+        review_text: reviewText
       });
       setRating(0);
       setReviewText("");
@@ -94,7 +95,7 @@ function ProductItem() {
                 <FaStar
                   key={i}
                   className={`${
-                    i < product.avg_rating ? "text-yellow-400" : "text-gray-300"
+                    i < reviews.average_rating ? "text-yellow-400" : "text-gray-300"
                   }`}
                 />
               ))}
