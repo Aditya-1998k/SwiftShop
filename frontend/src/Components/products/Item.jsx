@@ -11,13 +11,13 @@ function ProductItem() {
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [average_rating, setavgrating] = useState(0)
 
   // Review form state
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(null);
   const [reviewText, setReviewText] = useState("");
 
-  // 🔐 Replace with your auth logic
   const isAuthenticated = !!localStorage.getItem("token");
 
   const fetchProduct = async () => {
@@ -25,7 +25,7 @@ function ProductItem() {
       const res = await apiClient.get(`product/product/${id}/`);
       setProduct(res.data.product);
       setReviews(res.data.reviews);
-      console.log(res.data.reviews)
+      setavgrating(res.data.average_rating)
     } catch (err) {
       console.error(err);
     } finally {
@@ -95,7 +95,7 @@ function ProductItem() {
                 <FaStar
                   key={i}
                   className={`${
-                    i < reviews.average_rating ? "text-yellow-400" : "text-gray-300"
+                    i < average_rating ? "text-yellow-400" : "text-gray-300"
                   }`}
                 />
               ))}
