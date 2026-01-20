@@ -44,6 +44,7 @@ sudo systemctl start rabbitmq-server
 CELERY_BROKER_URL=amqp://user:password@localhost:5672//
 ```
 
+Install and Start Memcache
 ```bash
 sudo apt install memcached libmemcached-tools
 sudo nano /etc/memcached.conf
@@ -92,6 +93,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'test@gmail.com'
 EMAIL_HOST_PASSWORD = 'test'
+
+# Database
+DATABASE_URL = 'postgresql://<user>.<host>:<pwd>@aws-1-ap-northeast-1.pooler.supabase.com:<port>/postgres'
 ```
 
 ### Changes in settings.py
@@ -188,7 +192,7 @@ sudo systemctl reload nginx
 ```
 
 ### React Service Configuration
-Run `sudo nano /etc/systemd/system/swiftshop-react.service`
+Run `sudo nano /etc/systemd/system/react.service`
 
 Add this:
 ```bash
@@ -209,8 +213,8 @@ WantedBy=multi-user.target
 Reload
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl start swiftshop-react
-sudo systemctl enable swiftshop-react
+sudo systemctl start react
+sudo systemctl enable react
 ```
 
 Service COnfiguration for Celery Workers:
