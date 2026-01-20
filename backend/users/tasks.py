@@ -1,5 +1,3 @@
-
-# users/tasks.py
 from celery import shared_task
 from django.core.mail import EmailMessage
 from django.contrib.auth.models import User
@@ -23,15 +21,12 @@ def send_welcome_email_task(user_id):
         "Happy Shopping!\n"
         "- SwiftShop Team"
     )
-
     email = EmailMessage(
         subject=subject,
         body=body,
         to=[user.email],
     )
-
     email.send()
-
     return f"Welcome email sent to {user.email}"
 
 
@@ -43,24 +38,18 @@ def send_promotional_emails():
         return "User not found"
 
     for user in users:
+        subject="🔥 Special Offer Just for You!"
+        body=(
+            f"Hi {user.username}\n\n"
+            "We have new discounts waiting for you.\n"
+            "Visit SwiftShop now and save more today!\n\n"
+            "🚀 Limited time offers!\n\n"
+            "- Team SwiftShop"
+        )
         email = EmailMessage(
-            subject="🔥 Special Offer Just for You!",
-            body=f"""
-Hi {user.username},
-
-We have new discounts waiting for you.
-Visit SwiftShop now and save more today!
-
-🚀 Limited time offers!
-
-- Team SwiftShop
-""",
+            subject=subject,
+            body=body,
             to=[user.email]
         )
-
-        try:
-            email.send()
-        except Exception:
-            pass  # log errors if needed
-
+        email.send()
     return f"Sent promotional emails to {users.count()} users"
