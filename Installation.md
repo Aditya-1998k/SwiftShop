@@ -44,6 +44,24 @@ sudo systemctl start rabbitmq-server
 CELERY_BROKER_URL=amqp://user:password@localhost:5672//
 ```
 
+```bash
+sudo apt install memcached libmemcached-tools
+sudo nano /etc/memcached.conf
+```
+Add below settings
+```
+-m 256            # memory in MB (adjust if needed)
+-p 11211          # port
+-l 127.0.0.1      # localhost only (VERY IMPORTANT)
+-U 0              # disable UDP
+-t 1              # SINGLE THREAD (as you want)
+```
+```
+sudo systemctl restart memcached
+sudo systemctl enable memcached
+systemctl status memcached
+```
+
 Steps:
 ### Create Virtual Environment and Install required dependency
 ```bash
