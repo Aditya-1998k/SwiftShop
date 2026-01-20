@@ -52,7 +52,6 @@ def create_order(request):
 @permission_classes([IsAuthenticated])
 def latest_order(request):
     order = Order.objects.filter(user=request.user).order_by("-id").first()
-
     if not order:
         return Response({"error": "No order found"}, status=404)
 
@@ -63,6 +62,7 @@ def latest_order(request):
         "created_at": order.created_at,
         "status": order.status,
     })
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
